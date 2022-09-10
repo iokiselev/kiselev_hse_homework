@@ -1,0 +1,19 @@
+# task 1
+word = str(input('Введите слово: '))
+length_of_word = len(word)
+if length_of_word % 2 == 0:
+  print(word[length_of_word//2-1]+word[length_of_word//2])
+else:
+  print(word[length_of_word//2])
+  
+# task 2
+boys = ['Peter', 'Alex', 'John', 'Arthur', 'Richard']
+girls = ['Kate', 'Liza', 'Kira', 'Emma', 'Trisha']
+boys = sorted(boys)
+girls = sorted(girls)
+if len(boys) == len(girls):
+  print("Идеальные пары:")
+  for i in range(len(boys)):
+    print(boys[i], "и", girls[i])
+else:
+  print("Внимание, ккто-то может остаться без пары!")
