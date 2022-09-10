@@ -1,0 +1,27 @@
+# task 1
+year = int(input('Введите год: '))
+
+if (year % 4 == 0 and year % 100 != 0) or year % 400 == 0:
+
+  print("Високосный год")
+
+else:
+
+  print("Обычный год")
+  
+# task 2
+number = int(input('Введите номер проездного:'))
+first_sum = 0
+second_sum = 0
+first_digit = number // 100000
+second_digit = number // 10000 % 10
+third_digit = number // 1000 % 10
+fourth_digit = number // 100 % 10
+fifth_digit = number // 10 % 10
+sixth_digit = number % 10
+first_sum += first_digit + second_digit + third_digit
+second_sum += fourth_digit + fifth_digit + sixth_digit
+if first_sum == second_sum:
+  print("Счастливый билет.")
+else:
+  print("Несчастливый билет.")
