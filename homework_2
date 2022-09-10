@@ -16,4 +16,4 @@ if len(boys) == len(girls):
   for i in range(len(boys)):
     print(boys[i], "и", girls[i])
 else:
-  print("Внимание, ккто-то может остаться без пары!")
+  print("Внимание, кто-то может остаться без пары!")
