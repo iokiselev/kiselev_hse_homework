@@ -5,7 +5,6 @@ from unittest.mock import MagicMock
 def init(arg_format, Valute):
     t_init = Rate(arg_format)
     t_init.make_format(Valute)
-    expected = True
     if arg_format == 'full':
         expected = True
     else:
