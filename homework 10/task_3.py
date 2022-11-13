@@ -1,57 +1,37 @@
 import pytest
-from unittest.mock import MagicMock
+
+from rate import Rate
 
 
-def init(arg_format, Valute):
-    t_init = Rate(arg_format)
-    t_init.make_format(Valute)
-    if arg_format == 'full':
-        expected = True
-    else:
-        expected = False
-    if Valute == 'USD':
-        expected = True
-    else:
-        expected = False
-    return expected
+class TestRate:
+    url = 'https://www.cbr-xml-daily.ru/daily_json.js'
+    response = '{"Valute":{"EUR":{"Value":60,"Previous":59}}}'
 
+    def test_value(self, requests_mock):
+        requests_mock.get(self.url, text=self.response)
 
-@pytest.mark.parametrize("arg_format, Valute, expected",
-                         [('full', 'USD', True),
-                          ('value', 'USD', True),
-                          ('full', 'asdf', False),
-                          ('xcbv', '', False)])
-def test_init(arg_format, Valute, expected):
-    assert init(arg_format, Valute) == expected
-    return expected
+        rate = Rate()
 
+        assert rate.eur() == 60
 
-class Rate:
-    def __init__(self, format_='value'):
-        self.format = format_
+    def test_diff(self, requests_mock):
+        requests_mock.get(self.url, text=self.response)
 
-    def exchange_rates(self):
-        mock = MagicMock()
-        self.r = mock.return_value = {'USD': {'ID': 'R01239',
-                                                 'NumCode': '978',
-                                                 'CharCode': 'USD',
-                                                 'Nominal': 1,
-                                                 'Name': 'Евро',
-                                                 'Value': 61.5416,
-                                                 'Previous': 61.0037}}
-        return self.r
+        rate = Rate(diff=True)
 
-    def make_format(self, currency):
-        response = self.exchange_rates()
+        assert rate.eur() == 1
 
-        if currency in response:
-            if self.format == 'full':
-                return response[currency]
+    def test_full(self, requests_mock):
+        requests_mock.get(self.url, text=self.response)
 
-            if self.format == 'value':
-                return response[currency]['Value']
+        rate = Rate(format_='full')
 
-        return 'Error'
+        assert rate.eur() == {'Previous': 59, 'Value': 60}
 
-    def USD(self):
-        return self.make_format('USD')
+    @pytest.mark.parametrize('response,expected', [('{"Valute":{"EUR":{"Value":60,"Previous":59}}}', 60)])
+    def test_parametrize(self, requests_mock, response, expected):
+        requests_mock.get(self.url, text=response)
+
+        rate = Rate()
+
+        assert rate.eur() == expected
